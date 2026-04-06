@@ -8,16 +8,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Initialize environment variables
 env = environ.Env(
     DEBUG=(bool, False),
-    ALLOWED_HOSTS=(list, []),
+    ALLOWED_HOSTS=(list, ['*']),
 )
-environ.Env.read_env(os.path.join(BASE_DIR.parent, '.env'))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+# Read .env from project root if it exists
+ENV_FILE = os.path.join(BASE_DIR.parent, '.env')
+if os.path.exists(ENV_FILE):
+    environ.Env.read_env(ENV_FILE)
 
-SECRET_KEY = env('SECRET_KEY', default='django-insecure-change-me')
-DEBUG = env('DEBUG')
-ALLOWED_HOSTS = ['*']
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-prod-key-axiovital-2025')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env('DEBUG', default=False)
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 # Application definition
 INSTALLED_APPS = [
@@ -75,6 +80,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'axiovital.wsgi.application'
 
 # Database
+# Resilient database configuration for Serverless compatibility
 if env('DATABASE_URL', default=None):
     DATABASES = {
         'default': env.db_url('DATABASE_URL')
@@ -101,10 +107,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-ALLOWED_HOSTS = ['*'] # Required for Vercel dynamic assignment
-
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -120,5 +124,5 @@ TAILWIND_APP_NAME = 'theme'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = 'hospital:doctor_list'
+LOGOUT_REDIRECT_URL = 'accounts:login'
