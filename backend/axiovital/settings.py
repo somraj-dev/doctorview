@@ -35,14 +35,14 @@ INSTALLED_APPS = [
     
     # Third party apps
     'tailwind',
-    'theme',
+    'backend.theme',
     'django_browser_reload',
     'crispy_forms',
     'crispy_tailwind',
     
     # Local apps
-    'accounts',
-    'hospital',
+    'backend.accounts',
+    'backend.hospital',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +59,7 @@ MIDDLEWARE = [
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-ROOT_URLCONF = 'axiovital.urls'
+ROOT_URLCONF = 'backend.axiovital.urls'
 
 TEMPLATES = [
     {
@@ -77,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'axiovital.wsgi.application'
+WSGI_APPLICATION = 'backend.axiovital.wsgi.application'
 
 # Database
 # Resilient database configuration for Serverless compatibility
