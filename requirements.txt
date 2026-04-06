@@ -1,0 +1,15 @@
+django>=4.2,<5.0
+psycopg2-binary>=2.9
+django-environ
+django-tailwind
+django-browser-reload
+plotly
+pandas
+reportlab
+whitenoise
+gunicorn
+django-crispy-forms
+crispy-tailwind
+heroicons
+faker
+python-dateutil
