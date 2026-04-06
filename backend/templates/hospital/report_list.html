@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports - AxioVital{% endblock %}
+
+{% block page_title %}Medical Reports{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <input type="text" placeholder="Search reports..." class="w-72 bg-white border border-gray-200 rounded-lg py-2 pl-10 px-4 text-sm focus:ring-2 focus:ring-emerald-500 transition-all outline-none">
+            <select class="bg-white border border-gray-200 rounded-lg py-2 px-4 text-sm text-gray-500 outline-none">
+                <option>All Priority</option>
+                <option>Urgent</option>
+                <option>Moderate</option>
+                <option>Low</option>
+            </select>
+        </div>
+        <a href="{% url 'report_create' %}" class="btn-primary text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Report
+        </a>
+    </div>
+
+    <!-- Report List Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for report in reports %}
+        <div class="card p-6 border-l-4 {% if report.priority == 'URGENT' %}border-l-red-500{% elif report.priority == 'MODERATE' %}border-l-amber-500{% else %}border-l-emerald-500{% endif %}">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <span class="w-8 h-8 rounded-lg bg-gray-50 text-gray-400 flex items-center justify-center mr-3 text-sm">📄</span>
+                    <div>
+                        <h4 class="font-bold text-gray-800">{{ report.report_type }}</h4>
+                        <p class="text-[10px] text-gray-400 uppercase font-bold">{{ report.date|date:"F j, Y" }}</p>
+                    </div>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider 
+                    {% if report.priority == 'URGENT' %}bg-red-50 text-red-500
+                    {% elif report.priority == 'MODERATE' %}bg-amber-50 text-amber-500
+                    {% else %}bg-emerald-50 text-emerald-500{% endif %}">
+                    {{ report.priority }}
+                </span>
+            </div>
+            
+            <p class="text-sm text-gray-600 mb-6 line-clamp-3">
+                {{ report.summary }}
+            </p>
+
+            <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
+                <div class="flex items-center">
+                    <img src="https://ui-avatars.com/api/?name={{ report.patient.first_name }}+{{ report.patient.last_name }}&background=10B981&color=fff" class="w-6 h-6 rounded-full mr-2">
+                    <span class="text-xs text-gray-500 font-medium">{{ report.patient.first_name }} {{ report.patient.last_name }}</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <a href="{% url 'report_create' %}" class="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:text-emerald-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </a>
+                    <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:text-emerald-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full py-20 text-center text-gray-400">No medical reports found</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
