@@ -75,10 +75,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'axiovital.wsgi.application'
 
 # Database
-# Use PostgreSQL with environment variables
-DATABASES = {
-    'default': env.db_url('DATABASE_URL', default='postgres://postgres:postgres@db:5432/axiovital')
-}
+if env('DATABASE_URL', default=None):
+    DATABASES = {
+        'default': env.db_url('DATABASE_URL')
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

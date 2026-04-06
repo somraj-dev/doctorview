@@ -5,16 +5,12 @@
       "src": "backend/axiovital/wsgi.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-    },
-    {
-      "src": "backend/static/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
-      "dest": "backend/static/$1"
+      "dest": "backend/staticfiles/$1"
     },
     {
       "src": "/(.*)",
